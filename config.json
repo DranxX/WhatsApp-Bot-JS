@@ -6,6 +6,6 @@
   "status": "public",
   "autoread": "enable",
   "pairscode": "SAZA-SAZA",
-  "loginMethod": "pairs",
+  "loginMethod": "qr",
   "markdown": true
 }
