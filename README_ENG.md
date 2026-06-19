@@ -38,6 +38,8 @@
   </tr>
 </table>
 
+<img src='https://i.imgur.com/LyHic3i.gif' width="100%"/>
+
 ## ⚡ Dual Runtime: Bun + npm
 
 This project runs on **Bun** and **Node.js (npm)** with zero code changes. The SQLite backend auto-detects the runtime.
@@ -169,16 +171,6 @@ WhatsApp → Settings → Linked Devices → Link a Device → scan.
 [boot] pairing code: SAZA-SAZA
 [boot] enter this code in WhatsApp → Linked Devices
 ```
-
-
-
-### Owner Number
-
-The `owner` number is how the bot recognizes you. How it works:
-- **Linked Devices (LID):** The bot auto-resolves LID → phone number via WhatsApp's signal repository. You don't need to look up LIDs yourself.
-- **Groups:** Uses `participantAlt` for correct sender identification.
-- **Multiple accounts:** If you have several linked devices, the bot matches by phone number across all aliases.
-
 ---
 
 ## 📋 Commands
@@ -361,10 +353,11 @@ Incoming message (messages.upsert, type: notify)
           ├── AI concurrency guard (if category: ai)
           └── Execute plugin.handler(message, ctx)
 ```
----
+<img src='https://i.imgur.com/LyHic3i.gif' width="100%"/>
+
 
 ## 📄 License
 
-MIT — Free for personal & commercial use. Base built by **DranxX Creative** and contributor **RizzyFuzzy**.
+MIT — Free for personal & commercial use. Base built by **[@DranxX](https://github.com/DranXX)** and with contribution **[@RizzyFuzz](https://github.com/rizzbrew)**.
 
 Powered by [Baileys](https://github.com/WhiskeySockets/Baileys) v7 · SQLite via `bun:sqlite` / `better-sqlite3`

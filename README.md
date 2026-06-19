@@ -172,16 +172,6 @@ WhatsApp → Setelan → Perangkat Tertaut → Tautkan Perangkat → scan.
 [boot] pairing code: SAZA-SAZA
 [boot] masukkan kode ini di WhatsApp → Perangkat Tertaut
 ```
-
-
-
-### Nomor Owner
-
-Nomor `owner` adalah cara bot mengenali kamu. Fungsinya:
-- **Linked Devices (LID):** Bot otomatis resolve LID → nomor HP lewat signal repository WhatsApp. Kamu tidak perlu cari LID sendiri.
-- **Grup:** Menggunakan `participantAlt` untuk identifikasi pengirim yang benar.
-- **Banyak akun:** Jika kamu punya beberapa perangkat tertaut, bot mencocokkan berdasarkan nomor HP di semua alias.
-
 ---
 
 ## 📋 Command
@@ -372,6 +362,6 @@ Pesan masuk (messages.upsert, type: notify)
 
 ## 📄 Lisensi & Kredit
 
-MIT — Bebas untuk penggunaan pribadi & komersial. Base dibuat oleh **DranxX Creative** dengan kontributor **RizzyFuzzy**.
+MIT — Bebas untuk penggunaan pribadi & komersial. Base dibuat oleh **[@DranxX](https://github.com/DranXX)** dengan kontributor **[@RizzyFuzz](https://github.com/rizzbrew)**.
 
 Didukung oleh [Baileys](https://github.com/WhiskeySockets/Baileys) v7 · SQLite via `bun:sqlite` / `better-sqlite3`
