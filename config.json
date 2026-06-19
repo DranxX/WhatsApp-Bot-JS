@@ -1,0 +1,11 @@
+{
+  "name": "Saza-Bot",
+  "bot": "6287840420749",
+  "owner": "6287840420749",
+  "prefix": ".",
+  "status": "public",
+  "autoread": "enable",
+  "pairscode": "SAZA-SAZA",
+  "loginMethod": "pairs",
+  "markdown": true
+}
