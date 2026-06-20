@@ -1,10 +1,5 @@
-// By DranxX Creative
-
-
 import { areJidsSameUser } from 'baileys';
 import { addBan, removeBan, listBans } from '../lib/banStore.js';
-
-// ── Helpers ───────────────────────────────────────────────────────────────
 
 function parseDuration(str) {
   if (!str) return 0;
@@ -40,6 +35,17 @@ function getTarget(message, args) {
   if (message.quoted) return message.quoted.sender;
   const mentioned = message.mentionedJid?.[0];
   if (mentioned) return mentioned;
+  let hasNumberArg = false;
+  for (const arg of args) {
+    const stripped = arg.replace(/\D/g, '');
+    if (stripped.length >= 7) {
+      hasNumberArg = true;
+      break;
+    }
+  }
+  if (!hasNumberArg && message.chat && !message.chat.endsWith('@g.us')) {
+    return message.chat;
+  }
   const num = args[0]?.replace(/[^0-9]/g, '');
   if (num) return num + '@s.whatsapp.net';
   return null;
@@ -68,8 +74,22 @@ function resolvePhone(jid, groupMetadata) {
   if (jid.endsWith('@lid')) {
     const phone = lidToPhone(jid, groupMetadata);
     if (phone) return phone;
+    return null;
   }
   return jid.split(':')[0].split('@')[0];
+}
+
+async function resolveLidPhone(sock, jid, groupMetadata) {
+  if (!jid || !jid.endsWith('@lid')) return null;
+  if (groupMetadata?.participants) {
+    const p = groupMetadata.participants.find(p => areJidsSameUser(p.id, jid));
+    if (p?.phoneNumber) return p.phoneNumber;
+  }
+  try {
+    const pn = await sock.signalRepository?.lidMapping?.getPNForLID(jid);
+    if (pn) return pn;
+  } catch {}
+  return null;
 }
 
 function replyMention(sock, message, text, jids) {
@@ -90,8 +110,6 @@ function phoneJid(phoneNum) {
   return phoneNum + '@s.whatsapp.net';
 }
 
-// ── Plugin ────────────────────────────────────────────────────────────────
-
 export default {
   command: ['ban', 'unban', 'listban', 'banlist'],
   description: 'Ban/unban user dari bot',
@@ -100,7 +118,6 @@ export default {
   handler: async (message, { commandName, args, isOwner, ownerNum, botNum, groupMetadata, sock }) => {
     if (!isOwner) return;
 
-    // ── listban / banlist ──────────────────────────────────────────────
     if (commandName === 'listban' || commandName === 'banlist') {
       const list = listBans();
       if (!list.length) return message.reply('Tidak ada user yang di-ban.');
@@ -119,11 +136,16 @@ export default {
       return;
     }
 
-    // ── ban / unban ────────────────────────────────────────────────────
-    const target = getTarget(message, args);
+    let target = getTarget(message, args);
     if (!target) return message.reply('Tag/reply/ketik nomor user!');
 
-    // LID in group: resolve to real phone via groupMetadata
+    if (target.endsWith('@lid')) {
+      const resolved = await resolveLidPhone(sock, target, groupMetadata);
+      if (resolved) {
+        target = resolved;
+      }
+    }
+
     let phone = resolvePhone(target, groupMetadata);
     const isLid = target.endsWith('@lid');
 
@@ -137,7 +159,6 @@ export default {
     const displayNum = phone || target.split(':')[0].split('@')[0];
     const targetNum = displayNum.replace(/\D/g, '');
 
-    // Bypass: can't ban owner or bot
     if (targetNum === String(ownerNum || '').replace(/\D/g, '') ||
       targetNum === String(botNum || '').replace(/\D/g, '')) {
       return message.reply('Gak bisa ban owner/bot!');
@@ -150,13 +171,14 @@ export default {
       const durationSec = parseDuration(durationArg);
       const result = addBan(target, groupMetadata, durationSec);
 
-      const durText = durationSec > 0 ? ` selama ${formatDuration(durationSec)}` : ' permanent';
-      const actionText = result.created ? 'berhasil di-ban' : 'durasi ban diperbarui';
-      await replyMention(sock, message, `${mentionTag(displayNum)} ${actionText}${durText}.`, [targetJid]);
+      const durText = durationSec > 0 ? formatDuration(durationSec) : 'permanent';
+      await replyMention(sock, message, `${mentionTag(displayNum)} has been banned (${durText}).`, [targetJid]);
     } else if (commandName === 'unban') {
       const result = removeBan(target, groupMetadata);
-      if (!result.ok) return replyMention(sock, message, `${mentionTag(displayNum)} ${result.error}`, [targetJid]);
-      await replyMention(sock, message, `${mentionTag(displayNum)} berhasil di-unban.`, [targetJid]);
+      if (!result.ok) {
+        return replyMention(sock, message, `${mentionTag(displayNum)} ${result.error}`, [targetJid]);
+      }
+      await replyMention(sock, message, `${mentionTag(displayNum)} has been unbanned.`, [targetJid]);
     }
   }
 };
