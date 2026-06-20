@@ -229,14 +229,20 @@ async function connect() {
       if (connection === 'close') {
         if (watchdogTimer) { clearInterval(watchdogTimer); watchdogTimer = null; }
         const code = lastDisconnect?.error?.output?.statusCode;
-        if (code === DisconnectReason.loggedOut || !state.creds.registered) {
-          console.log(code === DisconnectReason.loggedOut ? '[boot] logged out' : '[boot] login failed — clearing session...');
+        if (code === DisconnectReason.loggedOut) {
+          console.log('[boot] logged out — clearing session...');
           await clearSession();
           reconnectAttempt = 0; qrRetries = 0; _loginShown = false;
           debounceReconnect(connect);
           return;
         }
         if (code === DisconnectReason.restartRequired) { _loginShown = false; debounceReconnect(connect);
+          return;
+        }
+        if (!state.creds.registered) {
+          console.log('[boot] linking...');
+          _loginShown = false;
+          debounceReconnect(connect);
           return;
         }
         const delay = Math.min(3000 * Math.pow(2, reconnectAttempt), 60000);

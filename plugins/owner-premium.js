@@ -15,6 +15,19 @@ function getTarget(message, args) {
     return { jid: mentioned, consumedArgs: 0 };
   }
 
+  let hasNumberArg = false;
+  for (const arg of args || []) {
+    const stripped = arg.replace(/\D/g, '');
+    if (stripped.length >= 7) {
+      hasNumberArg = true;
+      break;
+    }
+  }
+
+  if (!hasNumberArg && message.chat && !message.chat.endsWith('@g.us')) {
+    return { jid: message.chat, consumedArgs: 0 };
+  }
+
   const raw = String(args?.[0] || '').replace(/[^0-9]/g, '');
   if (raw) {
     return { jid: `${raw}@s.whatsapp.net`, consumedArgs: 1 };
@@ -131,10 +144,11 @@ export default {
       const result = addPremiumUser(target.jid, groupMetadata, durationSec);
       if (!result.ok) return message.reply(result.error);
       const displayNumber = result.entry.number || number;
-      const durText = durationSec > 0 ? ` selama ${formatDuration(durationSec)}` : ' permanent';
+      const durText = durationSec > 0 ? formatDuration(durationSec) : 'permanent';
+      const action = result.created ? 'added to premium' : 'premium duration updated';
       return replyMention(
         sock, message,
-        `${displayNumber ? mention(displayNumber) : 'User'} ${result.created ? 'berhasil ditambahkan ke premium' : 'durasi premium diperbarui'}${durText}.\nKredit: ${result.entry.credits}.`,
+        `${displayNumber ? mention(displayNumber) : 'User'} ${action} (${durText}).\nCredits: ${result.entry.credits}.`,
         mentions
       );
     }
@@ -142,8 +156,10 @@ export default {
     if (commandName === 'delprem') {
       const result = deletePremiumUser(target.jid, groupMetadata);
       const displayNumber = result.entry?.number || number;
-      if (!result.ok) return replyMention(sock, message, `${displayNumber ? mention(displayNumber) : 'User'} ${result.error}`, mentions);
-      return replyMention(sock, message, `${displayNumber ? mention(displayNumber) : 'User'} berhasil dihapus dari premium.`, mentions);
+      if (!result.ok) {
+        return replyMention(sock, message, `${displayNumber ? mention(displayNumber) : 'User'} ${result.error}`, mentions);
+      }
+      return replyMention(sock, message, `${displayNumber ? mention(displayNumber) : 'User'} removed from premium.`, mentions);
     }
   }
 };
