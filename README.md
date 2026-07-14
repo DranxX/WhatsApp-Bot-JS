@@ -3,8 +3,8 @@
 </p>
 <h1 align="center">Saza-Bot Whatsapp</h1>
 <p align="center">
-  WhatsApp bot dengan <strong>@baileys</strong> — Support JS + TS, Bun + npm.
-  <br/>Tinggal taruh file <code>.js</code> atau <code>.ts</code> → auto-loaded. Command langsung jalan.
+  WhatsApp bot powered by <strong>@baileys</strong> — Supports JS + TS, Bun + npm.
+  <br/>Just drop a <code>.js</code> or <code>.ts</code> file → auto-loaded. Commands work instantly.
 </p>
 
 <p align="center">
@@ -17,11 +17,11 @@
 </p>
 
 ---
-[`Here for English Readme!`](README.md) 
+[`Versi Bahasa Indonesia`](README_ID.md)
 
-## 📜 Apa itu Saza?
+## 📜 What is Saza?
 
-**SAZA (Smart Assistant with Zero-delay Answer)** adalah bot WhatsApp lightweight dengan arsitektur _persistent connection_ dan _multi-layer caching_. Setelah koneksi awal terbentuk, metadata grup, resolusi identitas (LID → nomor) serta plugin di-cache di memori — sehingga respons pertama sudah cepat, dan pesan selanjutnya diproses hampir tanpa delay yang terasa.
+**SAZA (Smart Assistant with Zero-delay Answer)** is a lightweight WhatsApp bot built on a _persistent connection_ and _multi-layer caching_ architecture. Once the initial connection is established, group metadata, identity resolution (LID → phone number), and plugins are cached in memory — so the first response is already fast, and subsequent messages are processed with almost no perceptible delay.
 
 <table align="center">
   <tr>
@@ -40,38 +40,37 @@
 
 <img src='https://i.imgur.com/LyHic3i.gif' width="100%"/>
 
-
 ## ⚡ Dual Runtime: Bun + npm
 
-Project ini berjalan di **Bun** dan **Node.js (npm)** tanpa perubahan kode sedikit pun. Backend SQLite otomatis mendeteksi runtime.
+This project runs on **Bun** and **Node.js (npm)** with zero code changes. The SQLite backend auto-detects the runtime.
 
 | | Bun | Node.js (npm) |
 |---|---|---|
-| **Perintah** | `bun --smol index.js` | `node index.js` |
-| **SQLite** | `bun:sqlite` (bawaan, tanpa native addon) | `better-sqlite3` (addon C++) |
-| **Plugin TS** | ✅ Native — `.ts` langsung jalan | ⚠️ Butuh `tsx` |
-| **RAM dasar** | ~10-20MB lebih rendah (JSC vs V8) | Sedikit lebih tinggi |
-| **Startup** | ~500ms | ~2-3 detik |
-| **Hot reload** | `bun --watch index.js` | Pakai `nodemon` |
+| **Command** | `bun --smol index.js` | `node index.js` |
+| **SQLite** | `bun:sqlite` (built-in, no native addon) | `better-sqlite3` (C++ addon) |
+| **TS Plugins** | ✅ Native — `.ts` works directly | ⚠️ Requires `tsx` |
+| **Base RAM** | ~10-20MB lower (JSC vs V8) | Slightly higher |
+| **Startup** | ~500ms | ~2-3 seconds |
+| **Hot reload** | `bun --watch index.js` | Use `nodemon` |
 
 ```bash
 # Node.js (npm | recommended)
 npm install
 node index.js
-node index.js --memlog     # + log RAM
+node index.js --memlog     # + RAM logging
 
 # Bun
 bun install
-bun --smol index.js        # --smol = GC lebih agresif
-bun --smol index.js --memlog  # + tampilkan log RAM
+bun --smol index.js        # --smol = more aggressive GC
+bun --smol index.js --memlog  # + RAM logging
 ```
 
-### Flag CLI
+### CLI Flags
 
-| Flag | Deskripsi |
+| Flag | Description |
 |------|-------------|
-| `--smol` | (Bun only) GC lebih agresif, mengurangi peak RAM |
-| `--memlog` | Tampilkan RSS/heap/external memory di startup & after connect |
+| `--smol` | (Bun only) More aggressive GC, lower peak RAM |
+| `--memlog` | Show RSS/heap/external memory at startup & after connect |
 
 ---
 
@@ -79,20 +78,20 @@ bun --smol index.js --memlog  # + tampilkan log RAM
 
 ### Environment
 
-- **Node.js 18+** (disarankan) atau **Bun**
-- **git** (untuk clone)
+- **Node.js 18+** (recommended) or **Bun**
+- **git** (for cloning)
 
 ```bash
 git clone <repo-url> sazabot
 cd sazabot
-npm install          # atau: bun install
-nano config.json     # isi owner, nomor bot, nama
-node index.js        # atau: bun --smol index.js
+npm install          # or: bun install
+nano config.json     # fill in owner, bot number, name
+node index.js        # or: bun --smol index.js
 ```
 
-Bot otomatis bikin direktori `db/` waktu pertama kali startup. Scan QR code di terminal (atau pakai pairing code).
+The bot auto-creates the `db/` directory on first startup. Scan the QR code in the terminal (or use a pairing code).
 
-### Ganti Runtime
+### Switching Runtimes
 
 ```bash
 # Bun → Node.js (npm)
@@ -104,32 +103,32 @@ rm package-lock.json && bun install && bun index.js
 
 ---
 
-## 📖 Dokumentasi
+## 📖 Documentation
 
-| Dokumen | Deskripsi |
+| Document | Description |
 |-----|-------------|
-| [`docs/id/creating-plugins.md`](docs/id/creating-plugins.md) | Panduan lengkap plugin — referensi context, kirim pesan, resolusi target, integrasi premium, before hooks, hot-reload |
-| [`docs/id/airich-builder.md`](docs/id/airich-builder.md) | **AIRich** — builder rich response ala Meta AI. Format teks, code block dengan syntax highlighting, tabel, gambar, video, produk, reels, suggestions, source citations. Fluent API. |
+| [`docs/eng/creating-plugins.md`](docs/eng/creating-plugins.md) | Complete plugin guide — context reference, sending messages, target resolution, premium integration, before hooks, hot-reload |
+| [`docs/eng/airich-builder.md`](docs/eng/airich-builder.md) | **AIRich** — Meta AI-style rich response builder. Text formatting, code blocks with syntax highlighting, tables, images, video, products, reels, suggestions, source citations. Fluent API. |
 
 ---
 
 ## 📋 Config — `config.json`
 
-Edit `config.json` sebelum pertama kali menjalankan. Semua field:
+Edit `config.json` before the first run. All fields:
 
-| Field | Tipe | Wajib | Deskripsi |
+| Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | Ya | Nama tampilan bot |
-| `owner` | string | **Ya** | Nomor WhatsApp kamu — dapat akses penuh ke command owner. Tanpa `+`, tanpa spasi (contoh: `6289876543210`) |
-| `bot` | string | Untuk pairing | Nomor HP bot. Dipakai untuk pairing code + deteksi owner. |
-| `prefix` | string | Tidak | Awalan command, default `.` |
-| `status` | string | Tidak | `public` (default) — semua chat. `ponly` — private saja. `gonly` — grup saja. `self` — hanya owner+bot. |
-| `autoread` | string | Tidak | `enable` (default) — otomatis tandai pesan sudah dibaca. `disable` — biarkan belum dibaca. |
-| `loginMethod` | string | Tidak | `qr` (default) — scan QR di terminal. `pairs` — kode 8 digit di aplikasi WhatsApp. |
-| `pairscode` | string | Tidak | Kode kustom untuk pairing (default `SAZA-SAZA`). Hanya dipakai jika `loginMethod` = `pairs`. |
-| `markdown` | boolean | Tidak | `true` (default) — WhatsApp merender `*tebal*` `_miring_` secara native. |
+| `name` | string | Yes | Bot display name |
+| `owner` | string | **Yes** | Your WhatsApp number — gets full access to owner commands. No `+`, no spaces (e.g. `6289876543210`) |
+| `bot` | string | For pairing | Bot phone number. Used for pairing code + owner detection. |
+| `prefix` | string | No | Command prefix, default `.` |
+| `status` | string | No | `public` (default) — all chats. `ponly` — private only. `gonly` — groups only. `self` — owner+bot only. |
+| `autoread` | string | No | `enable` (default) — auto mark messages as read. `disable` — leave unread. |
+| `loginMethod` | string | No | `qr` (default) — scan QR in terminal. `pairs` — 8-digit code in WhatsApp app. |
+| `pairscode` | string | No | Custom code for pairing (default `SAZA-SAZA`). Only used when `loginMethod` = `pairs`. |
+| `markdown` | boolean | No | `true` (default) — WhatsApp natively renders `*bold*` `_italic_`. |
 
-**Contoh:**
+**Example:**
 ```json
 {
   "name": "MyBot",
@@ -144,11 +143,11 @@ Edit `config.json` sebelum pertama kali menjalankan. Semua field:
 }
 ```
 
-### Metode Login
+### Login Methods
 
 **QR Code** (default):
 ```
-[boot] scan QR code di bawah:
+[boot] scan the QR code below:
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 █ ▄▄▄▄▄ █ ▀▀▄ ██▄██ ▄▄▄▄▄ █
 █ █   █ ███ ▄▄ ▄  █ █   █ █
@@ -165,135 +164,135 @@ Edit `config.json` sebelum pertama kali menjalankan. Semua field:
 █▄▄▄▄▄▄▄█▄▄▄▄████▄▄▄██▄██▄█
 ...
 ```
-WhatsApp → Setelan → Perangkat Tertaut → Tautkan Perangkat → scan.
+WhatsApp → Settings → Linked Devices → Link a Device → scan.
 
 **Pairing Code:**
 ```
 [boot] pairing code: SAZA-SAZA
-[boot] masukkan kode ini di WhatsApp → Perangkat Tertaut
+[boot] enter this code in WhatsApp → Linked Devices
 ```
 ---
 
-## 📋 Command
+## 📋 Commands
 
-| Command | Kategori | Deskripsi |
+| Command | Category | Description |
 |---------|----------|-------------|
-| `.ping` | utility | Kecepatan, CPU, RAM |
-| `.menu` / `.help` | info | Daftar command per kategori |
-| `.profile` | info | Status premium + kredit kamu |
-| `.msgbuild` / `.airich` | info | Inspeksi message builder |
+| `.ping` | utility | Speed, CPU, RAM |
+| `.menu` / `.help` | info | Command list by category |
+| `.profile` | info | Your premium status + credits |
+| `.msgbuild` / `.airich` | info | Inspect message builder |
 | `$ <command>` | owner | Execute terminal commands (owner only) |
-| `.set <public\|self\|ponly\|gonly>` | owner | Ubah mode status |
-| `.setp <prefix>` / `.setprefix` | owner | Ubah prefix command |
-| `.ban <target> [durasi]` | owner | Ban user (d/m/j/h, default permanen) |
+| `.set <public\|self\|ponly\|gonly>` | owner | Change status mode |
+| `.setp <prefix>` / `.setprefix` | owner | Change command prefix |
+| `.ban <target> [duration]` | owner | Ban user (d/h/m/days, default permanent) |
 | `.unban <target>` | owner | Unban user |
-| `.listban` / `.banlist` | owner | Tampilkan semua user yang di-ban |
-| `.addprem <target> [durasi]` | owner | Tambah user premium |
-| `.delprem <target>` | owner | Hapus user premium |
-| `.listprem` | owner | Tampilkan semua user premium |
-| `.hello` / `.hi` | info | Demo plugin TypeScript |
+| `.listban` / `.banlist` | owner | Show all banned users |
+| `.addprem <target> [duration]` | owner | Add premium user |
+| `.delprem <target>` | owner | Remove premium user |
+| `.listprem` | owner | Show all premium users |
+| `.hello` / `.hi` | info | TypeScript plugin demo |
 
 ---
 
-### Format Log
+### Log Format
 
-Pesan ditandai berdasarkan tipe di konsol:
+Messages are tagged by type in the console:
 
-| Tag | Tipe Pesan | Mengeksekusi Command? |
+| Tag | Message Type | Executes Command? |
 |-----|-------------|---------------------|
-| `[msg]` | Teks percakapan / extended text | ✅ Ya |
-| `[react]` | Reaction emoji (🍥) | ❌ Dilewati |
-| `[sticker]` | Stiker | ❌ Dilewati |
-| `[img]` | Gambar dengan caption | ✅ Ya (caption) |
-| `[vid]` | Video dengan caption | ✅ Ya (caption) |
-| `[audio]` | Voice note | ❌ Dilewati |
-| `[doc]` | Dokumen dengan caption | ✅ Ya (caption) |
-| `[self]` | Pesan dari HP bot sendiri | ❌ Tanpa eksekusi command |
+| `[msg]` | Conversation / extended text | ✅ Yes |
+| `[react]` | Reaction emoji (🍥) | ❌ Skipped |
+| `[sticker]` | Sticker | ❌ Skipped |
+| `[img]` | Image with caption | ✅ Yes (caption) |
+| `[vid]` | Video with caption | ✅ Yes (caption) |
+| `[audio]` | Voice note | ❌ Skipped |
+| `[doc]` | Document with caption | ✅ Yes (caption) |
+| `[self]` | Message from bot's own phone | ❌ No command execution |
 
 ---
 
-### Sistem Ban (`lib/banStore.js`)
+### Ban System (`lib/banStore.js`)
 
-Berbasis SQLite dengan pencocokan multi-alias (JID + LID + nomor HP). Ban kedaluwarsa otomatis dibersihkan saat dibaca.
+SQLite-based with multi-alias matching (JID + LID + phone number). Expired bans auto-cleaned on read.
 
-**Command:** `.ban @user [durasi]` \| `.unban @user` \| `.listban`
+**Commands:** `.ban @user [duration]` \| `.unban @user` \| `.listban`
 
 ```text
-.ban @user 1j       → ban selama 1 jam
-.ban @user 30m      → ban selama 30 menit
-.ban @user 7h       → ban selama 7 hari
-.ban @user          → ban permanen
-.unban @user        → hapus ban
+.ban @user 1h       → ban for 1 hour
+.ban @user 30m      → ban for 30 minutes
+.ban @user 7d       → ban for 7 days
+.ban @user          → permanent ban
+.unban @user        → remove ban
 ```
 
-Target melalui: reply pesan user, mention `@user`, atau ketik nomornya langsung.
+Target via: reply to user's message, `@user` mention, or type their number directly.
 
-### Sistem Premium (`lib/premiumStore.js`)
+### Premium System (`lib/premiumStore.js`)
 
-Berbasis SQLite dengan 10 kredit/bulan. Kredit otomatis reset saat pertama diakses setelah batas bulan (lazy reset — tanpa cron). Pencocokan multi-alias.
+SQLite-based with 10 credits/month. Credits auto-reset on first access after the monthly boundary (lazy reset — no cron). Multi-alias matching.
 
-**Command:** `.addprem @user [durasi]` \| `.delprem @user` \| `.listprem`
+**Commands:** `.addprem @user [duration]` \| `.delprem @user` \| `.listprem`
 
 ```text
-.addprem @user 30h  → premium 30 hari, 10 kredit
-.addprem @user      → premium permanen
-.listprem           → tampilkan semua user premium dengan kredit
+.addprem @user 30d  → premium 30 days, 10 credits
+.addprem @user      → permanent premium
+.listprem           → show all premium users with credits
 ```
 ---
 
-### Manajemen Session (`lib/sqlite-auth.js`)
+### Session Management (`lib/sqlite-auth.js`)
 
-- Session disimpan di `db/session/session.db` (SQLite, satu file)
-- Saat logout: otomatis bersihkan session, reconnect, tampilkan QR baru
-- **Bad MAC recovery:** Jika kunci enkripsi corrupt (Bad MAC error), bot otomatis clear session & tampilkan QR baru — tanpa restart manual
-- Exponential backoff: 3dtk → 6dtk → 12dtk → ... → maks 60dtk
-- Reconnect di-debounce: mencegah duplikasi loop reconnect
-- File WAL + SHM otomatis dibersihkan saat session di-reset
+- Session stored in `db/session/session.db` (SQLite, single file)
+- On logout: auto-clear session, reconnect, show new QR
+- **Bad MAC recovery:** If encryption keys are corrupted (Bad MAC error), the bot auto-clears the session & shows a new QR — no manual restart needed
+- Exponential backoff: 3s → 6s → 12s → ... → max 60s
+- Reconnect debounced: prevents duplicate reconnect loops
+- WAL + SHM files auto-cleaned on session reset
 
 ---
 
-## 💾 RAM & Performa
+## 💾 RAM & Performance
 
-Baileys (library WhatsApp Web) mendominasi memori di ~80-150MB terlepas dari runtime. Keunggulan Bun:
+Baileys (WhatsApp Web library) dominates memory at ~80-150MB regardless of runtime. Bun's advantages:
 
-| Aspek | Penghematan |
+| Aspect | Savings |
 |------|---------|
-| Baseline JSC vs V8 | ~10-20MB lebih rendah |
-| `bun:sqlite` vs `better-sqlite3` | Tanpa overhead native addon |
-| Flag `--smol` | GC lebih agresif, peak lebih rendah |
-| `generateHighQualityLinkPreview: false` | Hindari loading dependency pemrosesan gambar |
+| Baseline JSC vs V8 | ~10-20MB lower |
+| `bun:sqlite` vs `better-sqlite3` | No native addon overhead |
+| `--smol` flag | More aggressive GC, lower peak |
+| `generateHighQualityLinkPreview: false` | Avoids loading image processing deps |
 
-Untuk kebanyakan bot, perbedaan RAM tidak terlalu besar karena state kripto Baileys adalah bottleneck. Keunggulan utama Bun adalah **kecepatan startup** (~500ms vs 2-3 detik) dan **dukungan TS native**.
+For most bots, the RAM difference is marginal since Baileys' crypto state is the bottleneck. Bun's main advantages are **startup speed** (~500ms vs 2-3 seconds) and **native TS support**.
 
 ---
 
-## 📁 Struktur Direktori
+## 📁 Directory Structure
 
 ```
 template-jsts-bun/
 ├── index.js                 # Entry point — connect, reconnect, message loop
-├── handler.js               # Pipeline pesan — dispatch command, cek ban
-├── config.json              # Pengaturan bot
-├── package.json             # Script dual Bun + npm
+├── handler.js               # Message pipeline — command dispatch, ban check
+├── config.json              # Bot settings
+├── package.json             # Dual Bun + npm scripts
 ├── README.md
 │
-├── db/                      # Database SQLite (auto-created)
-│   ├── session/session.db   # Session multi-device WhatsApp
-│   ├── banned/banned.db     # Daftar banned
-│   └── premium/premium.db   # Pengguna premium
+├── db/                      # SQLite databases (auto-created)
+│   ├── session/session.db   # WhatsApp multi-device session
+│   ├── banned/banned.db     # Banned users list
+│   └── premium/premium.db   # Premium users
 │
 ├── lib/
-│   ├── sqlite.js            # Wrapper SQLite — auto deteksi Bun/Node
-│   ├── sqlite-auth.js       # Auth state Baileys via SQLite
-│   ├── messages.js          # Parser pesan + helper (.reply/.react/.delete)
-│   ├── messageBuilder.js    # Builder pesan interaktif
-│   ├── pluginLoader.js      # Scanner JS+TS + hot-reload chokidar
-│   ├── config.js            # Loader & simpan config
-│   ├── banStore.js          # Sistem ban (SQLite)
-│   └── premiumStore.js      # Sistem premium (SQLite)
+│   ├── sqlite.js            # SQLite wrapper — auto-detect Bun/Node
+│   ├── sqlite-auth.js       # Baileys auth state via SQLite
+│   ├── messages.js          # Message parser + helpers (.reply/.react/.delete)
+│   ├── messageBuilder.js    # Interactive message builder
+│   ├── pluginLoader.js      # JS+TS scanner + chokidar hot-reload
+│   ├── config.js            # Config loader & saver
+│   ├── banStore.js          # Ban system (SQLite)
+│   └── premiumStore.js      # Premium system (SQLite)
 │
 └── plugins/
-    ├── hello.ts             # Demo plugin TypeScript
+    ├── hello.ts             # TypeScript plugin demo
     ├── utility-ping.js      # .ping .stats .status
     ├── info-menu.js         # .menu .help
     ├── info-profile.js      # .profile
@@ -301,67 +300,64 @@ template-jsts-bun/
     ├── owner-ban.js         # .ban .unban .listban
     ├── owner-premium.js     # .addprem .delprem .listprem
     ├── owner-exec.js        # $ (shell exec, owner only)
-    ├── owner-set.js         # .set (mode status)
+    ├── owner-set.js         # .set (status mode)
     ├── owner-setprefix.js   # .setp .setprefix
     └── hidden-autorespon.js # Auto-react (before hook)
 ```
 
 ---
 
-## 🏗 Arsitektur
+## 🏗 Architecture
 
-### Alur Startup
+### Startup Flow
 
 ```
 start()
   ├── loadAllPlugins()          → scan plugins/*.js + plugins/*.ts
-  ├── watchPlugins()            → hot-reload chokidar (add/change/unlink)
+  ├── watchPlugins()            → chokidar hot-reload (add/change/unlink)
   └── connect()
-        ├── fetchLatestBaileysVersion()   → versi protokol
-        ├── useSQLiteAuthState()          → session dari db/session/
-        ├── makeWASocket()                → socket Baileys v7 WhatsApp Web
-        │     ├── makeCacheableSignalKeyStore()  → kompat Bun (kunci async)
-        │     └── generateHighQualityLinkPreview: false  → hemat RAM
+        ├── fetchLatestBaileysVersion()   → protocol version
+        ├── useSQLiteAuthState()          → session from db/session/
+        ├── makeWASocket()                → Baileys v7 WhatsApp Web socket
+        │     ├── makeCacheableSignalKeyStore()  → Bun compat (async keys)
+        │     └── generateHighQualityLinkPreview: false  → save RAM
         └── sock.ev handler
               ├── connection.update  → QR, loggedOut, reconnect
               ├── messages.upsert    → Messages() → msgHandler()
               ├── messages.update    → (internal)
-              └── call               → auto-tolak
+              └── call               → auto-reject
 ```
 
-### Pipeline Pesan
+### Message Pipeline
 
 ```
-Pesan masuk (messages.upsert, type: notify)
+Incoming message (messages.upsert, type: notify)
   │
-  ├── Lewati jika >60 detik, status@broadcast, atau tidak ada remoteJid
-  ├── Buka wrappers ephemeral / viewOnce / documentWithCaption
-  └── Wrapper Messages()
-        ├── Resolve pengirim (participantAlt untuk grup, LID→phone)
-        ├── Ekstrak teks / caption / konten reaction
-        ├── Bangun quoted message jika ada
-        └── Pasang helper .reply() .react() .delete()
+  ├── Skip if >60s old, status@broadcast, or no remoteJid
+  ├── Unwrap ephemeral / viewOnce / documentWithCaption wrappers
+  └── Messages() wrapper
+        ├── Resolve sender (participantAlt for groups, LID→phone)
+        ├── Extract text / caption / reaction content
+        ├── Build quoted message if present
+        └── Attach .reply() .react() .delete() helpers
               │
               ▼
         msgHandler()
-          ├── Filter status (public / ponly / gonly / self)
-          ├── Resolusi LID → phone (di-cache)
-          ├── Deteksi owner (fromMe || cocok nomor)
-          ├── Cek ban (silent drop jika dibanned)
-          ├── Jalankan semua before() hooks plugin
-          ├── Deteksi prefix (prefix atau "$ " untuk owner)
-          ├── Pencarian plugin
-          ├── Guard konkurensi AI (jika category: ai)
-          └── Eksekusi plugin.handler(message, ctx)
+          ├── Status filter (public / ponly / gonly / self)
+          ├── LID → phone resolution (cached)
+          ├── Owner detection (fromMe || number match)
+          ├── Ban check (silent drop if banned)
+          ├── Run all plugin before() hooks
+          ├── Prefix detection (prefix or "$ " for owner)
+          ├── Plugin lookup
+          ├── AI concurrency guard (if category: ai)
+          └── Execute plugin.handler(message, ctx)
 ```
-
-
 <img src='https://i.imgur.com/LyHic3i.gif' width="100%"/>
 
 
+## 📄 License
 
-## 📄 Lisensi & Kredit
+MIT — Free for personal & commercial use. Base built by **[@DranxX](https://github.com/DranXX)** and with contribution **[@RizzyFuzz](https://github.com/rizzbrew)**.
 
-MIT — Bebas untuk penggunaan pribadi & komersial. Base dibuat oleh **[@DranxX](https://github.com/DranXX)** dengan kontributor **[@RizzyFuzz](https://github.com/rizzbrew)**.
-
-Didukung oleh [Baileys](https://github.com/WhiskeySockets/Baileys) v7 · SQLite via `bun:sqlite` / `better-sqlite3`
+Powered by [Baileys](https://github.com/WhiskeySockets/Baileys) v7 · SQLite via `bun:sqlite` / `better-sqlite3`
