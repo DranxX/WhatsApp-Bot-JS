@@ -17,7 +17,7 @@
 </p>
 
 ---
-[`Versi Bahasa Indonesia`](README.md)
+[`Versi Bahasa Indonesia`](README_ID.md)
 
 ## 📜 What is Saza?
 

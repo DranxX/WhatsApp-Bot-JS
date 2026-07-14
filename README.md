@@ -17,7 +17,7 @@
 </p>
 
 ---
-[`Here for English Readme!`](README_ENG.md) 
+[`Here for English Readme!`](README.md) 
 
 ## 📜 Apa itu Saza?
 
